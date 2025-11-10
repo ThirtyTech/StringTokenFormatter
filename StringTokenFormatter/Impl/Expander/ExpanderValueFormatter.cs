@@ -23,7 +23,7 @@ public sealed class ExpanderValueFormatter
         {
             if (TryGetBestDefinition(valueType, tokenName, formatString, out FormatterDefinition? definition))
             {
-                formattedValue = definition.Formatter.DynamicInvoke(value, formatString) as string ?? string.Empty;
+                formattedValue = definition.Formatter.DynamicInvoke(value, formatString, tokenName) as string ?? string.Empty;
                 return true;
             }
             formattedValue = string.Empty;
