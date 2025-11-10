@@ -10,6 +10,10 @@ public enum UnresolvedTokenBehavior
     /// Unmatched tokens or invalid values (based on the policy) result in the original token being output.
     /// </summary>
     LeaveUnresolved = 1,
+    /// <summary>
+    /// Unmatched tokens or invalid values (based on the policy) result in a replacement value being used.
+    /// </summary>
+    Replace = 2,
 }
 public enum InvalidFormatBehavior
 {
@@ -51,6 +55,10 @@ public interface IInterpolatedStringSettings
     /// Gets the behavior to use when a token cannot be found in the container. Default: `UnresolvedTokenBehavior.Throw`
     /// </summary>
     public UnresolvedTokenBehavior UnresolvedTokenBehavior { get; }
+    /// <summary>
+    /// Gets the replacement value to use when `UnresolvedTokenBehavior` is set to `Replace`. Default: `string.Empty`
+    /// </summary>
+    public string UnresolvedTokenReplacement { get; }
     /// <summary>
     /// Gets the collection of Value Converters.
     /// </summary>
@@ -97,8 +105,15 @@ public interface IHierarchicalTokenValueContainerSettings : ITokenValueContainer
     /// </summary>
     public string HierarchicalDelimiter { get; }
 }
+public interface IUnresolvedTokenReplacementSettings : ITokenValueContainerSettings
+{
+    /// <summary>
+    /// Gets the replacement value for unresolved tokens.
+    /// </summary>
+    public string UnresolvedTokenReplacement { get; }
+}
 public record StringTokenFormatterSettings
-    : ITokenValueContainerSettings, IInterpolatedStringSettings, ICompositeTokenValueContainerSettings, IHierarchicalTokenValueContainerSettings
+    : ITokenValueContainerSettings, IInterpolatedStringSettings, ICompositeTokenValueContainerSettings, IHierarchicalTokenValueContainerSettings, IUnresolvedTokenReplacementSettings
 {
     /// <summary>
     /// Initial settings from which custom settings can be derived.
@@ -128,6 +143,7 @@ public record StringTokenFormatterSettings
     }
 
     public string HierarchicalDelimiter { get; init; } = ".";
+    public string UnresolvedTokenReplacement { get; init; } = string.Empty;
 
     public IReadOnlyCollection<FormatterDefinition> FormatterDefinitions
     {
