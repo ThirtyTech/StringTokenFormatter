@@ -17,7 +17,7 @@ public static class ExpanderContextExtensions
 
         }
 
-        var behavior = context.Settings.UnresolvedTokenReplacementPredicate(tokenName, context.Settings.UnresolvedTokenBehavior);
+        var behavior = context.Settings.UnresolvedTokenReplacementFormatter(tokenName, context.Settings.UnresolvedTokenBehavior);
         if (behavior == UnresolvedTokenBehavior.Throw || (behavior == null && context.Settings.UnresolvedTokenBehavior == UnresolvedTokenBehavior.Throw))
         {
             throw new UnresolvedTokenException($"Token '{tokenName}' was not found within the container");

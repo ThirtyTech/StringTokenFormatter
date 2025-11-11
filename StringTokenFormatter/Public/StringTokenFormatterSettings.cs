@@ -62,7 +62,7 @@ public interface IInterpolatedStringSettings
     /// <summary>
     /// Gets the predicate to determine which tokens should use the `UnresolvedTokenReplacement` value.
     /// </summary>
-    public Func<string, UnresolvedTokenBehavior, UnresolvedTokenBehavior?> UnresolvedTokenReplacementPredicate { get; }
+    public Func<string, UnresolvedTokenBehavior, UnresolvedTokenBehavior?> UnresolvedTokenReplacementFormatter { get; }
     /// <summary>
     /// Gets the collection of Value Converters.
     /// </summary>
@@ -115,7 +115,7 @@ public interface IUnresolvedTokenReplacementSettings : ITokenValueContainerSetti
     /// Gets the replacement value for unresolved tokens.
     /// </summary>
     public string UnresolvedTokenReplacement { get; }
-    public Func<string, UnresolvedTokenBehavior, UnresolvedTokenBehavior?> UnresolvedTokenReplacementPredicate { get; }
+    public Func<string, UnresolvedTokenBehavior, UnresolvedTokenBehavior?> UnresolvedTokenReplacementFormatter { get; }
 }
 public record StringTokenFormatterSettings
     : ITokenValueContainerSettings, IInterpolatedStringSettings, ICompositeTokenValueContainerSettings, IHierarchicalTokenValueContainerSettings, IUnresolvedTokenReplacementSettings
@@ -149,7 +149,7 @@ public record StringTokenFormatterSettings
 
     public string HierarchicalDelimiter { get; init; } = ".";
     public string UnresolvedTokenReplacement { get; init; } = string.Empty;
-    public Func<string, UnresolvedTokenBehavior, UnresolvedTokenBehavior?> UnresolvedTokenReplacementPredicate { get; init; } = (_, _default) => _default;
+    public Func<string, UnresolvedTokenBehavior, UnresolvedTokenBehavior?> UnresolvedTokenReplacementFormatter { get; init; } = (_, _default) => _default;
     public IReadOnlyCollection<FormatterDefinition> FormatterDefinitions
     {
         get { return formatterDefinitions ?? defaultFormatterDefinitions; }
