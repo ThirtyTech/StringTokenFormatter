@@ -5,15 +5,15 @@ public static class ExpanderContextExtensions
     public static TryGetResult TryGetTokenValue(this ExpanderContext context, string tokenName)
     {
         var pseudoMatch = context.Commands.TryMapPseudo(context, tokenName);
-        if (pseudoMatch.IsSuccess && pseudoMatch.Value is not null) { return pseudoMatch; }
+        if (pseudoMatch.IsSuccess) { return pseudoMatch; }
 
         var containerMatch = context.Container.TryMap(tokenName);
-        if (containerMatch.IsSuccess && containerMatch.Value is not null)
+        if (containerMatch.IsSuccess)
         {
             if (containerMatch.Value is not ISequenceTokenValueContainer sequence) { return containerMatch; }
 
             var sequenceMatch = sequence.TryMap(tokenName, GetLoopIteration(context, sequence));
-            if (sequenceMatch.IsSuccess && sequenceMatch.Value is not null) { return sequenceMatch; }
+            if (sequenceMatch.IsSuccess) { return sequenceMatch; }
 
         }
 
