@@ -23,7 +23,12 @@ public sealed class ExpanderValueFormatter
         {
             if (TryGetBestDefinition(valueType, tokenName, formatString, out FormatterDefinition? definition))
             {
-                formattedValue = definition.Formatter.DynamicInvoke(value, formatString, tokenName) as string ?? string.Empty;
+                formattedValue = definition.Formatter.GetMethodInfo().GetParameters().Length switch
+                {
+                    2 => definition.Formatter.DynamicInvoke(value, formatString) as string ?? string.Empty,
+                    3 => definition.Formatter.DynamicInvoke(value, formatString, tokenName) as string ?? string.Empty,
+                    _ => throw new FormatException($"Formatter has invalid number of parameters '{definition}'"),
+                };
                 return true;
             }
             formattedValue = string.Empty;
@@ -67,7 +72,7 @@ public sealed class ExpanderValueFormatter
             {
                 candidateScore += 10;
             }
-            else 
+            else
             {
                 continue;
             }
